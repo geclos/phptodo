@@ -1,0 +1,96 @@
+<?php
+	session_start();
+	$_SESSION["name"] = $_POST["name"];
+	$tableName = $_SESSION["name"];
+
+	include 'data.php';
+	include 'functions.php';
+	$connection = connectAndSelect($host,$user,$password,$database);
+?>	
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>To do - <?php echo $tableName;?></title>
+		<link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" media="screen">
+		<link rel="stylesheet" type="text/css" href="/css/bootstrap-responsive.min.css">
+		<link  rel="stylesheet" href="/css/main.css" type="text/css" media="screen">
+	</head>
+	
+	<body>
+
+		<header id="appHeader" class="clearfix">
+				<h1 class="dropdown">Hola, <?php echo '<a href="app.php" class="dropdown-toggle" data-toggle="dropdown" data-target="#">' . $tableName . '</a>';?>
+					<ul class="dropdown-menu pull-right" role="menu" aria-labelledby="drop3">
+						<li><a id="logOut" tabindex="-1" href="close.php">Log Out</a></li>
+					</ul>
+			</nav>
+		</header>
+
+		<form method="POST" action="insert.php" id="the-form" class="form-inline">
+			<div class="input-append">
+			<input type="text" name="task" id="task" placeholder="Your task" autofocus />
+			<button type="submit" name="submit" class="btn btn-primary" id="submit">Send</button>
+			</div>
+			<div class="control-group">	
+				<div class="controls">
+					<label class="checkbox">
+					<input type="checkbox" name="urgent" id="urgent"> Urgent
+					</label>
+				</div>
+			</div>
+		</form>
+
+		<ul id="my-list" class="clearfix">
+			<?php
+
+			//Check if table exist
+
+			$checkTable = tableExist($connection,$database,$tableName);
+			$itExist = fetch($checkTable);
+
+			//Creates table if it doesn't exist
+			
+			if(!$itExist) {
+				$createTable = "CREATE TABLE {$tableName} (
+					id smallint(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+					task varchar(140) NOT NULL,
+					urgent boolean NOT NULL
+					) CHARACTER SET utf8 COLLATE utf8_spanish_ci";
+
+				$created = mysql_query($createTable,$connection);
+
+				if (!$created) {
+					die("Database query failed: " . mysql_error());
+				}
+			}
+
+			//Retrieves and displays table's results.
+
+			$query = "SELECT * FROM {$tableName} ORDER BY id DESC";
+			$result = consult($connection,$query);
+			
+			if ($result) {
+				$array = fetch($result);
+				while ($array) {
+					if ($array["urgent"] == 1) {
+						echo '<div class="clearfix"><li id="' . $array["id"] . '" class="text-error">' . $array["task"] . '</li>';
+						echo '<button id="delete-' . $array["id"] . '" class="btn btn-small">Delete</button></div>';
+					}else {
+						echo '<div class="clearfix"><li id="' . $array["id"] . '">' . $array["task"] . '</li>';
+						echo '<button id="delete-' . $array["id"] . '" class="btn btn-small">Delete</button></div>';
+					}
+					$array = fetch($result);
+				}
+			}
+			?>
+		</ul>
+
+	</body>
+
+	<script type="text/javascript" src="/js/jquery-1.8.2.min.js"></script>
+	<script type="text/javascript" src="/js/main.js"></script>
+	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+
+</html>

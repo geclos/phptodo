@@ -1,0 +1,85 @@
+body {
+	max-width: 400px;
+	margin: 15% auto 20px auto;
+}
+
+/*welcome.php*/
+
+#loginHeader h1 {
+	text-align: center;
+}
+
+#loginHeader h2 {
+	text-align: right;
+	color: #aaa;
+}
+
+#loginForm {
+	margin: 20px 0 0;
+}
+
+section.alertSection {
+	background-color: #FFEBE8;
+	border: 1px solid red;
+}
+
+section.alertSection article.alertArticle {
+	text-align: center;
+}
+
+section.alertSection article.alertArticle .negrita {
+	font-weight: bold;
+}
+
+/*app.php*/
+
+#appHeader {
+	text-align: center;
+}
+
+.dropdown-menu li a{
+	font-size: 16px;
+}
+
+#the-form {
+	margin-top: 50px;
+}
+
+#the-form .input-append {
+	width: 100%;
+}
+
+#the-form span.help-block {
+	margin-top: 10px;
+}
+
+#updateForm {
+	margin-bottom: 0;
+}
+
+#task {
+	width: 79%;
+}
+
+#my-list {
+	list-style: none;
+	margin: 0 auto;
+}
+
+#my-list div {
+	padding: 10px 0;
+}
+
+#my-list li {
+	margin-top: 5px;
+	margin-right: 20px;
+	float: left;
+}
+
+#my-list button {
+	float: right;
+}
+
+.red {
+	color: red;
+}
